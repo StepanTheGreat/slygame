@@ -7,10 +7,16 @@ type Window* = object
 proc init*() =
     sdl2.init(sdl2.INIT_VIDEO)
 
+proc is_init*(): bool =
+    bool(sdl2.wasInit(INIT_VIDEO) and INIT_VIDEO)
+
 proc quit*() =
     sdl2.quitSubSystem(sdl2.INIT_VIDEO)
 
 proc set_mode*(size: (int, int) = (0, 0), caption: string = "Slygame", flags: uint = 0): Window =
+    if not is_init():
+        init()
+        
     let window = sdl2.createWindow(
         caption, 
         sdl2.SDL_WINDOWPOS_CENTERED, 

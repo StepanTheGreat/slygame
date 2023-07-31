@@ -1,0 +1,4 @@
+# Ignoring binaries in the tests directory
+
+tests/test*
+!tests/test*.nim
