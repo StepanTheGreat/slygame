@@ -16,7 +16,7 @@ proc quit*() =
 proc set_mode*(size: (int, int) = (0, 0), caption: string = "Slygame", flags: uint = 0): Window =
     if not is_init():
         init()
-        
+
     let window = sdl2.createWindow(
         caption, 
         sdl2.SDL_WINDOWPOS_CENTERED, 
@@ -25,6 +25,7 @@ proc set_mode*(size: (int, int) = (0, 0), caption: string = "Slygame", flags: ui
         size[1].int32,
         flags.uint32
     )
+
     let renderer = window.createRenderer(0, 0)
     Window(window_ptr: window, renderer_ptr: renderer)
 
