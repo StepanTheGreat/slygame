@@ -6,23 +6,24 @@
 # To run these tests, simply execute `nimble test`.
 
 #import unittest
-import slygame
-import slygame/display
-import slygame/time
+import slygame, slygame/display, slygame/time
 
-slygame.init()
-# var clock = time.newClock(60)
+const FPS = 20
+
+var clock = time.newClock()
 var screen = display.set_mode((800, 800), "Super window")
 
 var close_on = 0
 while true:
-    time.delay(20)
+    clock.tick(FPS)
+
+    echo close_on
     close_on += 1
     if close_on > 180:
         break
 
     screen.fill((0, 0, 255, 255))
     screen.flip()
-    
 
 time.delay(1000)
+slygame.quit()
