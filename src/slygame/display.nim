@@ -1,8 +1,9 @@
 import sdl2
+import utils
 
-type Window* = object
-    window_ptr: WindowPtr
-    renderer_ptr: RendererPtr
+type Window* = object 
+    windowPtr:  sdl2.WindowPtr
+    rendererPtr: sdl2.RendererPtr
 
 proc init*() =
     sdl2.init(sdl2.INIT_VIDEO)
@@ -13,7 +14,7 @@ proc is_init*(): bool =
 proc quit*() =
     sdl2.quitSubSystem(sdl2.INIT_VIDEO)
 
-proc set_mode*(size: (int, int) = (0, 0), caption: string = "Slygame", flags: uint = 0): Window =
+proc set_mode*(caption: string, size: (int, int) = (0, 0), flags: uint = 0): Window =
     if not is_init():
         init()
 
@@ -25,26 +26,34 @@ proc set_mode*(size: (int, int) = (0, 0), caption: string = "Slygame", flags: ui
         size[1].int32,
         flags.uint32
     )
-
     let renderer = window.createRenderer(0, 0)
-    Window(window_ptr: window, renderer_ptr: renderer)
+
+    Window(
+        windowPtr: window,
+        rendererPtr: renderer
+    )
 
 proc flip*(window: var Window) =
-    window.renderer_ptr.present()
+    window.rendererPtr.present()
 
 proc set_caption*(window: var Window, title: string) = 
-    window.window_ptr.setTitle(title)
+    window.windowPtr.setTitle(title)
 
 proc set_icon*(window: var Window, surface: sdl2.SurfacePtr) = 
-    window.setIcon(surface)
+    window.windowPtr.setIcon(surface)
 
 # Draw functions
 
-proc fill*(window: var Window, color: (int, int, int, int)) = 
-    window.renderer_ptr.setDrawColor(
-        color[0].uint8,
-        color[1].uint8,
-        color[2].uint8,
-        color[3].uint8,
+proc fill*(window: var Window, color: uint32) =
+    window.rendererPtr.setDrawColor(
+        utils.extractRGB(color)
     )
-    window.renderer_ptr.clear()
+    window.rendererPtr.clear()
+
+proc draw_rect*(window: var Window, color: uint32, rect: (int, int, int, int)) = 
+    let r = sdl2.rect(rect[0].cint, rect[1].cint, rect[2].cint, rect[3].cint)
+
+    window.rendererPtr.setDrawColor(
+        utils.extractRGB(color)
+    )
+    window.rendererPtr.drawRect(unsafeAddr r)

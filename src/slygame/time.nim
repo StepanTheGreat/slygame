@@ -3,7 +3,7 @@ import sdl2
 type Clock* = object
     frame_time: uint32
 
-proc newClock*(): Clock =
+proc clock*(): Clock =
     Clock(frame_time: 0.uint32)
 
 proc tick*(clock: var Clock, fps: uint) = 
